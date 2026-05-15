@@ -1,10 +1,12 @@
 import express from 'express';
+import sanitize from './middlewares/sanitize.js';
 import errorHandler from './middlewares/errorHandler.js';
 
 
 const app = express();
 
 app.use(express.json());
+app.use(sanitize);
 
 
 app.get('/', (req, res) => {
