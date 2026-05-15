@@ -1,0 +1,30 @@
+import mongoose from 'mongoose';
+import { STATUS } from '../constants.js';
+
+
+const storeSchema = new mongoose.Schema(
+    {
+        name: {
+            type: String,
+            required: [true, 'Назва магазину обов\'язкова'],
+            trim: true,
+        },
+        address: {
+            type: String,
+            trim: true,
+        },
+        status: {
+            type: Number,
+            enum: [STATUS.ACTIVE, STATUS.INACTIVE],
+            default: STATUS.INACTIVE,
+        },
+    },
+    {
+        timestamps: true,
+        collection: process.env.STORES_COLLECTION,
+    }
+);
+
+const Store = mongoose.model('Store', storeSchema);
+
+export default Store;
