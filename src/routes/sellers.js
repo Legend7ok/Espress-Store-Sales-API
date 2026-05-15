@@ -27,3 +27,26 @@ router.get('/:id', validateId, async (req, res, next) => {
         next(err);
     }
 });
+
+
+router.post('/', async (req, res, next) => {
+   try {
+       const { name, email, phone, status } = req.body;
+
+       if (!name) return next(new AppError('Field name is required', HTTP.BAD_REQUEST));
+
+       const seller = await Seller.create({ name, email, phone, status });
+       res.status(HTTP.CREATED).json({ status: 'success', data: seller });
+   } catch (err) {
+       if (err.code === 11000) {
+           return next(new AppError('Seller with this email already exists', HTTP.BAD_REQUEST));
+       }
+       if (err.name === 'ValidationError') {
+           const message = Object.values(err.errors).map(e => e.message).join('; ');
+           return next(new AppError(message, HTTP.BAD_REQUEST));
+       }
+       next(err);
+   }
+});
+
+export default router;
