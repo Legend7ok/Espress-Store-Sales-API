@@ -3,7 +3,7 @@ import app from './src/app.js';
 import connectDB from "./src/db/connect.js";
 
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT
 
 await connectDB();
 
