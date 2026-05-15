@@ -1,4 +1,5 @@
 import express from 'express';
+import errorHandler from './middlewares/errorHandler.js';
 
 
 const app = express();
@@ -13,5 +14,13 @@ app.get('/', (req, res) => {
 });
 
 
+app.use((req, res) => {
+    res.status(HTTP.NOT_FOUND).json({
+        status: 'error',
+        message: `Route ${req.method} ${req.originalUrl} not found`,
+    });
+});
+
+app.use(errorHandler);
 
 export default app;
