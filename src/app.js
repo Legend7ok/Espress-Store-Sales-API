@@ -2,6 +2,7 @@ import express from 'express';
 import sanitize from './middlewares/sanitize.js';
 import errorHandler from './middlewares/errorHandler.js';
 import sellersRouter from './routes/sellers.js';
+import storesRouter from './routes/stores.js';
 import { HTTP } from './constants.js';
 
 
@@ -19,6 +20,7 @@ app.get('/', (req, res) => {
 
 
 app.use('/api/v1/sellers', sellersRouter);
+app.use('/api/v1/stores', storesRouter);
 
 
 app.use((req, res) => {
