@@ -2,6 +2,7 @@ import { HTTP } from '../constants.js';
 
 
 const errorHandler = (err, req, res, next) => {
+    console.error(err);
     const statusCode = err.statusCode || HTTP.SERVER_ERROR;
     const message = err.isOperational ? err.message : 'Internal Server Error';
 
