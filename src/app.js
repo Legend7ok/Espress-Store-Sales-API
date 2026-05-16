@@ -1,6 +1,7 @@
 import express from 'express';
 import sanitize from './middlewares/sanitize.js';
 import errorHandler from './middlewares/errorHandler.js';
+import sellersRouter from './routes/sellers.js';
 
 
 const app = express();
@@ -14,6 +15,9 @@ app.get('/', (req, res) => {
         message: 'Server works',
     });
 });
+
+
+app.use('/api/v1/sellers', sellersRouter);
 
 
 app.use((req, res) => {
