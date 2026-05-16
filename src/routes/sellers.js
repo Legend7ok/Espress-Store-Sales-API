@@ -20,7 +20,7 @@ router.get('/', async (req, res, next) => {
 
 router.get('/:id', validateId, async (req, res, next) => {
     try {
-        const seller = await Seller.findOne({ id: req.params.id, status: STATUS.ACTIVE });
+        const seller = await Seller.findOne({ _id: req.params.id, status: STATUS.ACTIVE });
         if (!seller) return next(new AppError('No such seller found', HTTP.NOT_FOUND));
         res.status(HTTP.OK).json({ status: 'success', data: seller });
     } catch (err) {
