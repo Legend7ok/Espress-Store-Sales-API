@@ -49,4 +49,34 @@ router.post('/', async (req, res, next) => {
    }
 });
 
+
+router.patch('/:id', validateId, async (req, res, next) => {
+    try {
+        const allowed = ['name', 'email', 'phone', 'status'];
+        const updates = Object.fromEntries(
+            Object.entries(req.body).filter(([key]) => allowed.includes(key))
+        );
+
+        const seller = await Seller.findOneAndUpdate(
+            { _id: req.params.id, status: STATUS.ACTIVE },
+            updates,
+            { new: true, runValidators: true }
+        );
+
+        if (!seller) return next(new AppError('Seller not found', HTTP.NOT_FOUND));
+
+        res.status(HTTP.OK).json({ status: 'success', data: seller });
+
+    } catch (err) {
+        if (err.code === 11000) {
+            return next(new AppError('Seller with this email already exists', HTTP.BAD_REQUEST));
+        }
+        if (err.name === 'ValidationError') {
+            const message = Object.values(err.errors).map(e => e.message).join('; ');
+            return next(new AppError(message, HTTP.BAD_REQUEST));
+        }
+        next(err);
+    }
+});
+
 export default router;
