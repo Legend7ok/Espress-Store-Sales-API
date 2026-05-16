@@ -2,6 +2,7 @@ import express from 'express';
 import sanitize from './middlewares/sanitize.js';
 import errorHandler from './middlewares/errorHandler.js';
 import sellersRouter from './routes/sellers.js';
+import { HTTP } from './constants.js';
 
 
 const app = express();
