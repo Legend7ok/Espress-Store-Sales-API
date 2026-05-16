@@ -79,4 +79,19 @@ router.patch('/:id', validateId, async (req, res, next) => {
     }
 });
 
+
+router.delete('/:id', validateId, async (req, res, next) => {
+    try {
+        const sale = await Sale.findOneAndUpdate(
+            { _id: req.params.id, status: STATUS.ACTIVE },
+            { status: STATUS.INACTIVE }
+        );
+
+        if (!sale) return next(new AppError('Sale not found', HTTP.NOT_FOUND));
+        res.status(HTTP.NO_CONTENT).send();
+    } catch (err) {
+        next(err);
+    }
+});
+
 export default router;
