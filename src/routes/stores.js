@@ -17,7 +17,7 @@ router.get('/', async (req, res, next) => {
 });
 
 
-router.get('/:id', async (req, res, next) => {
+router.get('/:id', validateId, async (req, res, next) => {
     try {
         const store = await Store.findOne({_id: req.params.id, status: STATUS.ACTIVE});
         if (!store) return next(new AppError('Store not found', HTTP.NOT_FOUND));
@@ -31,18 +31,18 @@ router.get('/:id', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
     try {
-        const { name, address, status } = req.body
-        if (!name) return next(new AppError('Field is required', HTTP.BAD_REQUEST));
+        const { name, address, status } = req.body;
+        if (!name) return next(new AppError('Field name is required', HTTP.BAD_REQUEST));
 
         const store = await Store.create({ name, address, status });
         res.status(HTTP.CREATED).json({ status: 'success', data: store });
     } catch (err) {
-    if (err.name === 'ValidationError') {
-      const message = Object.values(err.errors).map(e => e.message).join('; ');
-      return next(new AppError(message, HTTP.BAD_REQUEST));
+        if (err.name === 'ValidationError') {
+            const message = Object.values(err.errors).map(e => e.message).join('; ');
+            return next(new AppError(message, HTTP.BAD_REQUEST));
+        }
+        next(err);
     }
-    next(err);
-  }
 });
 
 

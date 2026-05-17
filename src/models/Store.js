@@ -6,7 +6,7 @@ const storeSchema = new mongoose.Schema(
     {
         name: {
             type: String,
-            required: [true, 'Назва магазину обов\'язкова'],
+            required: [true, 'Store name is required'],
             trim: true,
         },
         address: {
