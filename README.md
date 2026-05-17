@@ -29,6 +29,11 @@ RESTful API for store sales tracking.
 
 ## Endpoints
 
+### General
+| Method | URL | Description |
+|--------|-----|-------------|
+| GET | / | Health check |
+
 ### Sellers
 | Method | URL | Description |
 |--------|-----|-------------|
