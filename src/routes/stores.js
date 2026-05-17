@@ -45,4 +45,31 @@ router.post('/', async (req, res, next) => {
   }
 });
 
+
+router.patch('/:id', validateId, async (req, res, next) => {
+    try {
+        const allowed = ['name', 'address', 'status'];
+        const updates = Object.fromEntries(
+            Object.entries(req.body).filter(([key]) => allowed.includes(key))
+        );
+
+        const store = await Store.findOneAndUpdate(
+            { _id: req.params.id, status: STATUS.ACTIVE },
+            updates,
+            { new: true, runValidators: true }
+        );
+
+        if (!store) return next(new AppError('Store not found', HTTP.NOT_FOUND));
+
+        res.status(HTTP.OK).json({ status: 'success', data: store });
+
+    } catch (err) {
+        if (err.name === 'ValidationError') {
+            const message = Object.values(err.errors).map(e => e.message).join('; ');
+            return next(new AppError(message, HTTP.BAD_REQUEST));
+        }
+        next(err);
+    }
+});
+
 export default router;
