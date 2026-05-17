@@ -9,19 +9,19 @@ const router = Router();
 
 
 router.get('/', async (req, res, next) => {
-   try {
-       const sellers = await Seller.find({ status: STATUS.ACTIVE });
-       res.status(HTTP.OK).json({ status: 'success', data: sellers });
-   } catch (err) {
-       next(err);
-   }
+    try {
+        const sellers = await Seller.find({ status: STATUS.ACTIVE });
+        res.status(HTTP.OK).json({ status: 'success', data: sellers });
+    } catch (err) {
+        next(err);
+    }
 });
 
 
 router.get('/:id', validateId, async (req, res, next) => {
     try {
         const seller = await Seller.findOne({ _id: req.params.id, status: STATUS.ACTIVE });
-        if (!seller) return next(new AppError('No such seller found', HTTP.NOT_FOUND));
+        if (!seller) return next(new AppError('Seller not found', HTTP.NOT_FOUND));
         res.status(HTTP.OK).json({ status: 'success', data: seller });
     } catch (err) {
         next(err);
@@ -30,14 +30,14 @@ router.get('/:id', validateId, async (req, res, next) => {
 
 
 router.post('/', async (req, res, next) => {
-   try {
-       const { name, email, phone, status } = req.body;
+    try {
+        const { name, email, phone, status } = req.body;
 
-       if (!name) return next(new AppError('Field name is required', HTTP.BAD_REQUEST));
+        if (!name) return next(new AppError('Field name is required', HTTP.BAD_REQUEST));
 
-       const seller = await Seller.create({ name, email, phone, status });
-       res.status(HTTP.CREATED).json({ status: 'success', data: seller });
-   } catch (err) {
+        const seller = await Seller.create({ name, email, phone, status });
+        res.status(HTTP.CREATED).json({ status: 'success', data: seller });
+    } catch (err) {
        if (err.code === 11000) {
            return next(new AppError('Seller with this email already exists', HTTP.BAD_REQUEST));
        }
