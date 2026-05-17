@@ -36,4 +36,36 @@ router.get('/:id', validateId, async (req, res, next) => {
     }
 });
 
+
+router.post('/', async (req, res, next) => {
+    try {
+        const { sellerId, storeId, amount, itemsCount, date, status } = req.body;
+
+        if (!sellerId || !storeId || !amount || !itemsCount || !date) {
+            return next(new AppError('Fields sellerId, storeId, amount, itemsCount, date are required', HTTP.BAD_REQUEST));
+        }
+
+        if (!isValidObjectId(sellerId) || !isValidObjectId(storeId)) {
+            return next(new AppError('Invalid sellerId або storeId', HTTP.BAD_REQUEST));
+        }
+
+        const [seller, store] = await Promise.all([
+            Seller.findOne({ _id: sellerId, status: STATUS.ACTIVE }).select('_id'),
+            Store.findOne({ _id: storeId, status: STATUS.ACTIVE }).select('_id'),
+        ]);
+
+        if (!seller) return next(new AppError('Seller not found', HTTP.NOT_FOUND));
+        if (!store) return next(new AppError('Store not found', HTTP.NOT_FOUND));
+
+        const sale = await Sale.create({ sellerId, storeId, amount, itemsCount, date, status });
+        res.status(HTTP.CREATED).json({ status: 'success', data: sale });
+    } catch (err) {
+        if (err.name === 'ValidationError') {
+            const message = Object.values(err.errors).map(e => e.message).join('; ');
+            return next(new AppError(message, HTTP.BAD_REQUEST));
+        }
+        next(err);
+    }
+});
+
 export default router;
