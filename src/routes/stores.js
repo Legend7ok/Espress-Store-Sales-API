@@ -34,7 +34,7 @@ router.post('/', async (req, res, next) => {
         const { name, address, status } = req.body
         if (!name) return next(new AppError('Field is required', HTTP.BAD_REQUEST));
 
-        const store = await Store.create({ name, addrees, status });
+        const store = await Store.create({ name, address, status });
         res.status(HTTP.CREATED).json({ status: 'success', data: store });
     } catch (err) {
     if (err.name === 'ValidationError') {
