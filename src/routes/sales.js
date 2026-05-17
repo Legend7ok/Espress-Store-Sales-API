@@ -68,4 +68,46 @@ router.post('/', async (req, res, next) => {
     }
 });
 
+
+router.patch('/:id', validateId, async (req, res, next) => {
+   try {
+       const allowed = ['sellerId', 'storeId', 'amount', 'itemsCount', 'date', 'status'];
+       const updates = Object.fromEntries(
+           Object.entries(req.body).filter(([key]) => allowed.includes(key))
+       );
+
+       if (updates.sellerId) {
+           if (!isValidObjectId(updates.sellerId)) {
+               return next(new AppError('Invalid sellerId', HTTP.BAD_REQUEST));
+           }
+           const seller = await Seller.findOne({ _id: updates.sellerId, status: STATUS.ACTIVE }).select('_id');
+           if (!seller) return next(new AppError('Seller not found', HTTP.NOT_FOUND));
+       }
+
+       if (updates.storeId) {
+           if (!isValidObjectId(updates.storeId)) {
+               return next(new AppError('Invalid storeId', HTTP.BAD_REQUEST));
+           }
+           const store = await Store.findOne({ _id: updates.storeId, status: STATUS.ACTIVE }).select('_id');
+           if (!store) return next(new AppError('Store not found', HTTP.NOT_FOUND));
+       }
+
+       const sale = await Sale.findOneAndUpdate(
+           { _id: req.params.id, status: STATUS.ACTIVE },
+           updates,
+           { new: true, runValidators: true }
+       );
+
+       if (!sale) return next(new AppError('Sale not found', HTTP.NOT_FOUND));
+       res.status(HTTP.OK).json({ status: 'success', data: sale });
+
+   } catch (err) {
+       if (err.name === 'ValidationError') {
+           const message = Object.values(err.errors).map(e => e.message).join('; ');
+           return next(new AppError(message, HTTP.BAD_REQUEST));
+       }
+       next(err);
+   }
+});
+
 export default router;
