@@ -15,7 +15,10 @@ const storeSchema = new mongoose.Schema(
         },
         status: {
             type: Number,
-            enum: [STATUS.ACTIVE, STATUS.INACTIVE],
+            enum: {
+            values: [STATUS.ACTIVE, STATUS.INACTIVE],
+            message: 'Invalid status value',
+        },
             default: STATUS.INACTIVE,
         },
     },

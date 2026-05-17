@@ -19,10 +19,10 @@ router.get('/', async (req, res, next) => {
 
 router.get('/:id', validateId, async (req, res, next) => {
     try {
-        const store = await Store.findOne({_id: req.params.id, status: STATUS.ACTIVE});
+        const store = await Store.findOne({ _id: req.params.id, status: STATUS.ACTIVE });
         if (!store) return next(new AppError('Store not found', HTTP.NOT_FOUND));
 
-        res.status(HTTP.OK).json({status: 'success', data: store});
+        res.status(HTTP.OK).json({ status: 'success', data: store });
     } catch (err) {
         next(err);
     }
