@@ -14,8 +14,15 @@ app.use(sanitize);
 
 
 app.get('/', (req, res) => {
-    res.json({
-        message: 'Server works',
+    res.status(HTTP.OK).json({
+        status: 'success',
+        message: 'Sales API works',
+        version: 'v1',
+        endpoints: {
+            sellers: '/api/v1/sellers',
+            stores: '/api/v1/stores',
+            sales: '/api/v1/sales',
+        },
     });
 });
 
