@@ -3,6 +3,7 @@ import sanitize from './middlewares/sanitize.js';
 import errorHandler from './middlewares/errorHandler.js';
 import sellersRouter from './routes/sellers.js';
 import storesRouter from './routes/stores.js';
+import salesRouter from './routes/sales.js';
 import { HTTP } from './constants.js';
 
 
@@ -21,6 +22,7 @@ app.get('/', (req, res) => {
 
 app.use('/api/v1/sellers', sellersRouter);
 app.use('/api/v1/stores', storesRouter);
+app.use('/api/v1/sales', salesRouter);
 
 
 app.use((req, res) => {
