@@ -2,13 +2,13 @@
   "name": "express-store-sales-api",
   "version": "1.0.0",
   "description": "",
-  "homepage": "https://github.com/Legend7ok/Espress-Store-Sales-API#readme",
+  "homepage": "https://github.com/Legend7ok/Express-Store-Sales-API#readme",
   "bugs": {
-    "url": "https://github.com/Legend7ok/Espress-Store-Sales-API/issues"
+    "url": "https://github.com/Legend7ok/Express-Store-Sales-API/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Legend7ok/Espress-Store-Sales-API.git"
+    "url": "git+https://github.com/Legend7ok/Express-Store-Sales-API.git"
   },
   "license": "ISC",
   "author": "Dmytro",
