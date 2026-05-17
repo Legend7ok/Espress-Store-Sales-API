@@ -28,4 +28,21 @@ router.get('/:id', async (req, res, next) => {
     }
 });
 
+
+router.post('/', async (req, res, next) => {
+    try {
+        const { name, address, status } = req.body
+        if (!name) return next(new AppError('Field is required', HTTP.BAD_REQUEST));
+
+        const store = await Store.create({ name, addrees, status });
+        res.status(HTTP.CREATED).json({ status: 'success', data: store });
+    } catch (err) {
+    if (err.name === 'ValidationError') {
+      const message = Object.values(err.errors).map(e => e.message).join('; ');
+      return next(new AppError(message, HTTP.BAD_REQUEST));
+    }
+    next(err);
+  }
+});
+
 export default router;
