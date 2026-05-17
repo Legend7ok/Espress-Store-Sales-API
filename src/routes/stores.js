@@ -80,7 +80,7 @@ router.delete('/:id', validateId, async (req, res, next) => {
             { status: STATUS.INACTIVE },
         );
 
-        if(!store) return next(new AppError('Store not found', HTTP.NOT_FOUND));
+        if (!store) return next(new AppError('Store not found', HTTP.NOT_FOUND));
         res.status(HTTP.NO_CONTENT).send();
     } catch (err) {
         next(err);
